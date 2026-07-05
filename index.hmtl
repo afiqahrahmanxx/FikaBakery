@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Feeka Bakery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0;overflow:hidden;background:#ead7bd;font-family:Arial}
+canvas{width:100vw;height:100vh;display:block}
+#hud{position:fixed;top:10px;left:10px;background:white;padding:10px;border-radius:12px;font-weight:bold}
+#task{position:fixed;top:10px;right:10px;background:white;padding:10px;border-radius:12px;font-weight:bold}
+</style>
+</head>
+<body>
+
+<div id="hud">💰 RM <span id="coin">0</span></div>
+<div id="task">Pergi ke oven</div>
+<canvas id="game"></canvas>
+
+<script>
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+
+const assets={
+  bg:new Image(),
+  oven:new Image(),
+  fridge:new Image(),
+  mixer:new Image(),
+  player:new Image()
+};
+
+assets.bg.src="background.png";
+assets.oven.src="oven.png";
+assets.fridge.src="fridge.png";
+assets.mixer.src="mixer.png";
+assets.player.src="player.png";
+
+let coin=0;
+let player={x:600,y:400,w:80,h:100,speed:8};
+let keys={};
+
+document.addEventListener("keydown",e=>keys[e.key]=true);
+document.addEventListener("keyup",e=>keys[e.key]=false);
+
+function update(){
+  if(keys["ArrowUp"]) player.y-=player.speed;
+  if(keys["ArrowDown"]) player.y+=player.speed;
+  if(keys["ArrowLeft"]) player.x-=player.speed;
+  if(keys["ArrowRight"]) player.x+=player.speed;
+}
+
+function draw(){
+  ctx.clearRect(0,0,1280,720);
+
+  ctx.drawImage(assets.bg,0,0,1280,720);
+
+  ctx.drawImage(assets.fridge,120,120,120,160);
+  ctx.drawImage(assets.mixer,360,130,120,120);
+  ctx.drawImage(assets.oven,900,120,160,140);
+
+  ctx.drawImage(assets.player,player.x,player.y,player.w,player.h);
+}
+
+function loop(){
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+setTimeout(loop,1000);
+</script>
+
+</body>
+</html>
